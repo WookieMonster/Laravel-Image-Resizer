@@ -1,4 +1,4 @@
-# PHP Image Resizer Class
+Simple Image Resizer for Laravel
 
 ## Key features:
 
@@ -26,11 +26,11 @@ After installing the package make sure to add 'WookieMonster\ImageResizer\ImageR
 	$resizer->rotate(90)->export('/path/to/save/destination', 'myfilename', 'png');
 
 	// By default the export creates a random 32 character filename
-	export('/path/to/save/destination');
+	resizer->export('/path/to/save/destination');
 	// To specify the filename include it in the second parameter
-	export('/path/to/save/destination', 'myfilename');
+	resizer->export('/path/to/save/destination', 'myfilename');
 	// Specify the exported filetype with the third parameter
-	export('/path/to/save/destination', FALSE, 'png'); // saves png format
+	resizer->export('/path/to/save/destination', FALSE, 'png'); // saves png format
 
 	// After the image is exported use the getters for useful information about the file:
 	$resizer->getExif(); // exif data about the original file
