@@ -1,4 +1,4 @@
-Simple Image Resizer for Laravel
+# Simple Image Resizer for Laravel
 
 ## Key features:
 
@@ -13,26 +13,40 @@ After installing the package make sure to add 'WookieMonster\ImageResizer\ImageR
 
 ## Examples:
 
-	// loading an image using the facade:
+loading an image using the facade:
+
 	$resizer = ImageResizer::load('path/to/image.jpg');
 
-	// auto crop the image to a 2:1 rectangle
+auto crop the image to a 2:1 rectangle
+
 	$resizer->autocrop(2, 1)->export('/path/to/save/destination');
-	// auto crop the image to 1:1 (square) and resize the width to 200 maintaining aspect ratio
+
+auto crop the image to 1:1 (square) and resize the width to 200 maintaining aspect ratio
+
 	$resizer->autocrop(1, 1)->resize(200, 'w')->export('/path/to/save/destination');
-	// make a crop from x = 50, y = 20, 100 pixels wide and heigh
+
+make a crop from x = 50, y = 20, 100 pixels wide and heigh
+
 	$resizer->crop(50, 20, 100, 100)->greyscale()->export('/path/to/save/destination');
-	// rotate the image
+
+rotate the image
+
 	$resizer->rotate(90)->export('/path/to/save/destination', 'myfilename', 'png');
 
-	// By default the export creates a random 32 character filename
+By default the export creates a random 32 character filename
+
 	resizer->export('/path/to/save/destination');
-	// To specify the filename include it in the second parameter
+
+To specify the filename include it in the second parameter
+
 	resizer->export('/path/to/save/destination', 'myfilename');
-	// Specify the exported filetype with the third parameter
+
+Specify the exported filetype with the third parameter
+
 	resizer->export('/path/to/save/destination', FALSE, 'png'); // saves png format
 
-	// After the image is exported use the getters for useful information about the file:
+After the image is exported use the getters for useful information about the file:
+
 	$resizer->getExif(); // exif data about the original file
 	$resizer->getWidth(); // exported width
 	$resizer->getHeight(); // exported height
