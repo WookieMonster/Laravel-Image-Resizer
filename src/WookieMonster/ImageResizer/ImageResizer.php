@@ -86,9 +86,8 @@ class ImageResizer {
 			$left, $top, // source
 			$width, $height);
 
-		$this->width = $width;
-		$this->height = $height;
 		$this->file = $canvas;
+		$this->setImageSize();
 
 		return $this;
 	}
@@ -234,52 +233,76 @@ class ImageResizer {
 	}
 
 	/**
-	 * Resize the current image resource in the class maintaining aspect ratio
-	 * <size> parameter accepts 'width' or 'height' to resize against
+	 * Resize the current image resource using its width
 	 * 
 	 * @param integer
-	 * @param string
 	 * @return Object
 	 */
-	public function resize($newLength, $side = 'width')
+	public function resizeWidth($newWidth)
 	{
-		if ($side == 'width' || $side == 'w')
-		{
-			$newHeight = floor(($newLength / $this->width) * $this->height);
-			$canvas = imagecreatetruecolor($newLength, $newHeight);
+		$newHeight = ($newWidth / $this->width) * $this->height;
+		$canvas = imagecreatetruecolor($newWidth, $newHeight);
 
-			imagecopyresized($canvas, $this->file,
-				0, 0, // destination
-				0, 0, // source
-				$newLength, $newHeight,
-				$this->width, $this->height);
+		imagecopyresampled($canvas, $this->file,
+			0, 0,
+			0, 0,
+			$newWidth, $newHeight,
+			$this->width, $this->height);
 
-			$this->file = $canvas;
-			$this->width = $newLength;
-			$this->height = $newHeight;
-		}
-		else if ($side == 'height' || $side == 'h')
-		{
-			$newWidth = floor(($newLength / $this->height) * $this->width);
-			$canvas = imagecreatetruecolor($newLength, $newWidth);
-
-			imagecopyresized($canvas, $this->file,
-				0, 0, // destination
-				0, 0, // source
-				$newLength, $newWidth,
-				$this->width, $this->height);
-
-			$this->file = $canvas;
-			$this->width = $newWidth;
-			$this->height = $newLength;
-		}
-		else
-		{
-			throw new Exception\InvalidSideArgumentException('The side to be resized should be either width, w, height, h');
-		}
+		$this->file = $canvas;
+		$this->setImageSize();
 
 		return $this;
 	}
+
+	/**
+	 * Resize the current image resource using its width
+	 * 
+	 * @param integer
+	 * @return Object
+	 */
+	public function resizeHeight($newHeight)
+	{
+		$newWidth = ($newHeight / $this->height) * $this->width;
+		$canvas = imagecreatetruecolor($newWidth, $newHeight);
+
+		imagecopyresampled($canvas, $this->file,
+			0, 0,
+			0, 0,
+			$newWidth, $newHeight,
+			$this->width, $this->height);
+
+		$this->file = $canvas;
+		$this->setImageSize();
+
+		return $this;
+	}
+
+	/**
+	 * Resize the current image resource using its height
+	 * 
+	 * @param integer
+	 * @return Object
+	 */
+	/*
+	public function resizeHeight($newLength)
+	{
+		$newWidth = floor(($newLength / $this->height) * $this->width);
+		$canvas = imagecreatetruecolor($newLength, $newWidth);
+
+		imagecopyresized($canvas, $this->file,
+			0, 0, // destination
+			0, 0, // source
+			$newLength, $newWidth,
+			$this->width, $this->height);
+
+		$this->file = $canvas;
+		$this->width = $newWidth;
+		$this->height = $newLength;
+
+		return $this;
+	}
+	*/
 
 	/**
 	 * Roates the image through an appropriate angle
@@ -295,8 +318,7 @@ class ImageResizer {
 		}
 
 		$this->file = imagerotate($this->file, $angle, 0);
-		$this->width = imagesx($this->file);
-		$this->height = imagesy($this->file);
+		$this->setImageSize();
 
 		return $this;
 	}
@@ -311,6 +333,8 @@ class ImageResizer {
 	 */
 	public function export($directory = '/dev/null/', $filename = FALSE, $type = 'jpg')
 	{
+		$this->setImageSize();
+
 		if (substr($directory, -1) != '/')
 		{
 			$directory = $directory.'/';
@@ -351,9 +375,18 @@ class ImageResizer {
 				throw new Exception\InvalidImageOutputTypeException('Bad filetype given, must be jpg, png or gif');
 		}
 
-		imagedestroy($this->file);
-
 		return $this;
+	}
+
+	/**
+	 * Set image width and height attributes for the current image resource
+	 * 
+	 * @return null
+	 */
+	protected function setImageSize()
+	{
+		$this->width = imagesx($this->file);
+		$this->height = imagesy($this->file);
 	}
 
 	/**

@@ -75,6 +75,22 @@ class ImageResizerTest extends PHPUnit_Framework_Testcase {
 		$this->assertEquals(50, imagesx($resizer->getFile()));
 		$this->assertEquals(50, imagesy($resizer->getFile()));
 	}
+
+	public function testResizeWidth()
+	{
+		$resizer = new ImageResizer($this->testJpgImage);
+		$resizer->resizeWidth(50);
+		$this->assertEquals(50, imagesx($resizer->getFile()));
+		$this->assertEquals(25, imagesy($resizer->getFile()));
+	}
+
+	public function testResizeHeight()
+	{
+		$resizer = new ImageResizer($this->testJpgImage);
+		$resizer->resizeHeight(100);
+		$this->assertEquals(200, imagesx($resizer->getFile()));
+		$this->assertEquals(100, imagesy($resizer->getFile()));
+	}
 	
 	public function testAutoCropLandscapeToPortrait()
 	{
