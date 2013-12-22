@@ -23,7 +23,7 @@ Auto crop the image to a 2:1 rectangle:
 
 Auto crop the image to 1:1 (square) and resize the width to 200 maintaining aspect ratio:
 
-	$resizer->autocrop(1, 1)->resize(200, 'w')->export('/path/to/save/destination');
+	$resizer->autocrop(1, 1)->resizeWidth(200)->export('/path/to/save/destination');
 
 Make a crop from x = 50, y = 20, 100 pixels wide and heigh:
 
